@@ -1,0 +1,58 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LINQ
+{
+   public class PeopleList
+    {
+        public static readonly List<People> peoples = new List<People>
+        {
+            new People()
+            {
+                Id = 1,
+                Name = "Maria",
+                Age = 31,
+                GenderId = Guid.Parse("63a694f3-e80e-4df2-af2e-f35c5d973105")
+            },
+            new People()
+            {
+                Id = 2,
+                Name = "Maria",
+                Age = 21,
+                GenderId = Guid.Parse("bdf2fa86-d8dd-4548-bc98-3f15907b8e55")
+            },
+            new People()
+            {
+                Id = 3,
+                Name = "Ronaldo",
+                Age = 23,
+                GenderId = Guid.Parse("bdf2fa86-d8dd-4548-bc98-3f15907b8e55")
+            },
+            new People()
+            {
+                Id = 4,
+                Name = "Emex",
+                Age = 4,
+                GenderId = Guid.Parse("63a694f3-e80e-4df2-af2e-f35c5d973105")
+            },
+            new People()
+            {
+                Id = 5,
+                Name = "Armand",
+                Age = 6,
+                GenderId = Guid.Parse("63a694f3-e80e-4df2-af2e-f35c5d973105")
+            },
+            new People()
+            {
+                Id = 6,
+                Name = "Schwarschneger",
+                Age = 21,
+                GenderId = Guid.Parse("bdf2fa86-d8dd-4548-bc98-3f15907b8e55")
+            },
+
+        };
+    }
+}
