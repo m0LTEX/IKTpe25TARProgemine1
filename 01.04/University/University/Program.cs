@@ -8,7 +8,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddDbContext<UniversityContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("IniversityContect")));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("UniversityContext")));
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
