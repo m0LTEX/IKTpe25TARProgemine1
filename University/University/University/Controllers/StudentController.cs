@@ -57,5 +57,7 @@ namespace University.Controllers
             //kui student on leitud, siis tagastame View(student) tulemuse
             return View(student);
         }
+
+       
     }
 }
