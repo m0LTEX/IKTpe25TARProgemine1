@@ -1,10 +1,10 @@
-﻿@model University.ViewModel.StudentDetailsViewModel
+﻿@model University.ViewModel.StudentDeleteViewModel
 
 @{
-    ViewData["Title"] = "Student Details";
+    ViewData["Title"] = "Student Delete";
 }
 
-<h2>Student Details</h2>
+<h2>Student Delete</h2>
 <div>
     <h4>Student</h4>
     <hr />
@@ -48,6 +48,11 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+teha nupp, mis kustutab ankeedi ära 
+Nupp peab olema formi sees 
+<hr />
+<form asp-action="DeletePost">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-action="Index" asp-controller="student" class="btn btn-success">Back to List</a>
+</form>
