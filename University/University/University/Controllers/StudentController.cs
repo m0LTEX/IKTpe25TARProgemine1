@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Models;
+using University.Utilities;
 using University.ViewModel;
 
 namespace University.Controllers
@@ -18,14 +19,46 @@ namespace University.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber, string currentFilter)
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-            var students = from s in _context.Students
-                           select s;      
-            
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentFilter"] = searchString;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            //var students = from s in _context.Students
+            //               select s;
+
+            //leiame kõik student'id ja teisendame need StudentIndexViewModel'iks
+            //miks peab kasutama await?
+            //kui me kasutame await, siis me ootame kuni päring on lõpetatud
+            //ja saame tulemuse, enne kui me jätkame koodi täitmist
+            var students = _context.Students
+                .Select(s => new StudentIndexViewModel
+                {
+                    Id = s.Id,
+                    LastName = s.LastName,
+                    FirstMidName = s.FirstMidName,
+                    EnrollmentDate = s.EnrollmentDate
+                    //miks kasutame ToListAsync()?
+                    //kui me kasutame ToListAsync(), siis me saame tulemuse listina
+                });
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                    || s.FirstMidName.Contains(searchString));
+            }
+
             switch (sortOrder)
             {
                 case "name_desc":
@@ -45,22 +78,11 @@ namespace University.Controllers
                     break;
             }
 
-            //leiame kõik student'id ja teisendame need StudentIndexViewModel'iks
-            //miks peab kasutama await?
-            //kui me kasutame await, siis me ootame kuni päring on lõpetatud
-            //ja saame tulemuse, enne kui me jätkame koodi täitmist
-            var result = await _context.Students
-                .Select(s => new ViewModel.StudentIndexViewModel
-                {
-                    Id = s.Id,
-                    LastName = s.LastName,
-                    FirstMidName = s.FirstMidName,
-                    EnrollmentDate = s.EnrollmentDate
-                    //miks kasutame ToListAsync()?
-                    //kui me kasutame ToListAsync(), siis me saame tulemuse listina
-                }).ToListAsync();
+            var result = await students.ToListAsync();
 
-            return View(result);
+            int pageSize = 3;
+
+            return View(await PaginatedList<StudentIndexViewModel>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -131,7 +153,7 @@ namespace University.Controllers
         public async Task<IActionResult> Create(StudentCreateViewModel vm)
         {
             //kui model on valiidne, siis loome uue student'i ja salvestame selle andmebaasi
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 var student = new Models.Student
                 {
@@ -203,7 +225,6 @@ namespace University.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //tehke Delete Get meetod koos vaatega
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -247,8 +268,8 @@ namespace University.Controllers
             return View(vm);
         }
 
+
         //tuleb teha ankeedi kustutamise nupp
-        [HttpPost]
         public async Task<IActionResult> DeletePost(int id)
         {
             try
@@ -258,7 +279,7 @@ namespace University.Controllers
                     Id = id,
                 };
                 //teine variant
-                //var student = await _context.Students
+                //var delete = await _context.Students
                 //    .FirstOrDefaultAsync(x => x.Id == id);
 
                 _context.Students.Remove(delete);
@@ -267,7 +288,7 @@ namespace University.Controllers
             }
             catch (DbUpdateException)
             {
-                return RedirectToAction(nameof(Delete), new {id = id, saveChangesError = true});
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
                 throw;
             }
 
