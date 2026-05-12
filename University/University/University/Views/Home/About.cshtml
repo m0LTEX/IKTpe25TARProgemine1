@@ -1,0 +1,24 @@
+﻿@model List<University.ViewModel.EnrollmentDateGroupViewModel>
+
+@{
+    ViewBag.Title = "About";
+}
+
+<h1>Student Body Statistics</h1>
+
+<h2>Enrollment Date Students</h2>
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.EnrollmentDate?.ToString("dd-MMM-yy")
+            </td>
+
+            <td>
+                @item.StudentCount
+            </td>
+        </tr>
+    }
+</table>
