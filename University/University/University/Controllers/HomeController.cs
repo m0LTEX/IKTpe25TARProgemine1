@@ -35,7 +35,7 @@ namespace University.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> About() 
+        public async Task<IActionResult> About()
         {
             IQueryable<EnrollmentDateGroupViewModel> data =
                 from student in _context.Students
@@ -46,8 +46,6 @@ namespace University.Controllers
                     EnrollmentDate = dateGroup.Key,
                     StudentCount = dateGroup.Count(),
                 };
-
-            //Teha About vaade, mis kuvab üliõpilaste arvu registreerimise kuupäeva järgi.
 
             return View(await data.AsNoTracking().ToListAsync());
         }

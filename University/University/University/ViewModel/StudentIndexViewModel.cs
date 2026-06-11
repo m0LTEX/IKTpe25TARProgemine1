@@ -7,13 +7,9 @@ namespace University.ViewModel
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(50, MinimumLength = 1)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
-        [StringLength(50, MinimumLength = 1)]
         [Column("FirstName")]
         [Display(Name = "First Name")]
         public string FirstMidName { get; set; }
@@ -23,19 +19,18 @@ namespace University.ViewModel
         [Display(Name = "Enrollment Date")]
         public DateTime EnrollmentDate { get; set; }
 
+        //esimene variant, mis ühendab ees- ja perekonnanime
         [Display(Name = "Full Name")]
         public string FullName => $"{LastName}, {FirstMidName}";
 
+        //teine variant, mis ühendab ees- ja perekonnanime
         //[Display(Name = "Full Name")]
-
         //public string Fullname
         //{
         //    get
         //    {
         //        return $"{LastName}, {FirstMidName}";
         //    }
-        //  } 
+        //}
     }
 }
-
-

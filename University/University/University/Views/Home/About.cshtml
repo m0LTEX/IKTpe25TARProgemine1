@@ -1,24 +1,25 @@
-﻿@model List<University.ViewModel.EnrollmentDateGroupViewModel>
+﻿@model IEnumerable<University.ViewModel.EnrollmentDateGroupViewModel>
 
 @{
-    ViewBag.Title = "About";
+    ViewData["Title"] = "About";
 }
 
-<h1>Student Body Statistics</h1>
-
-<h2>Enrollment Date Students</h2>
+<h2>Student Body Statistics</h2>
 
 <table class="table">
-    @foreach (var item in Model)
-    {
+    <thead>
         <tr>
-            <td>
-                @item.EnrollmentDate?.ToString("dd-MMM-yy")
-            </td>
-
-            <td>
-                @item.StudentCount
-            </td>
+            <th>Enrollment Date</th>
+            <th>Number of Students</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var group in Model)
+        {
+            <tr>
+                <td>@group.EnrollmentDate</td>
+                <td>@group.StudentCount</td>
+            </tr>
+        }
+    </tbody>
 </table>
