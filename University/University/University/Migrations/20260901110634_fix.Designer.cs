@@ -12,8 +12,8 @@ using University.Data;
 namespace University.Migrations
 {
     [DbContext(typeof(UniversityContext))]
-    [Migration("20260611080815_FilesApi")]
-    partial class FilesApi
+    [Migration("20260901110634_fix")]
+    partial class fix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,6 +129,8 @@ namespace University.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.ToTable("FileToApis", (string)null);
                 });
@@ -255,6 +257,17 @@ namespace University.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("University.Models.FileToApi", b =>
+                {
+                    b.HasOne("University.Models.Course", "Course")
+                        .WithMany("Files")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("University.Models.OfficeAssignment", b =>
                 {
                     b.HasOne("University.Models.Instructor", "Instructor")
@@ -271,6 +284,8 @@ namespace University.Migrations
                     b.Navigation("CourseAssignments");
 
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("University.Models.Department", b =>
